@@ -28,6 +28,7 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 builder.Services.Configure<ENV>(builder.Configuration.GetSection("ENV"));
 
 Bifeldy.InitBuilder(builder);
+Bifeldy.SetupSerilog();
 Bifeldy.LoadConfig();
 Bifeldy.AddSwagger(
     apiUrlPrefix,
