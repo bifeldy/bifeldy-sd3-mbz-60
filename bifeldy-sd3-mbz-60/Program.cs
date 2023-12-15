@@ -33,7 +33,9 @@ Bifeldy.LoadConfig();
 Bifeldy.AddSwagger(
     apiUrlPrefix,
     "Portal Database API",
-    "Tempat Lempar Query :: Oracle / Postgre / MsSQL"
+    "Tempat Lempar Query :: Oracle / Postgre / MsSQL",
+    true,
+    false
 );
 Bifeldy.SetupDI();
 
