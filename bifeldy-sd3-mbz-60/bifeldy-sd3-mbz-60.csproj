@@ -14,4 +14,8 @@
     <ProjectReference Include="..\..\bifeldy-sd3-lib-60\bifeldy-sd3-lib-60\bifeldy-sd3-lib-60.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Middlewares\" />
+    </ItemGroup>
+
 </Project>

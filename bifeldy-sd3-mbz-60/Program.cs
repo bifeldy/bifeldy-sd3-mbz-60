@@ -25,9 +25,9 @@ string apiUrlPrefix = "api";
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
-
 builder.Services.Configure<ENV>(builder.Configuration.GetSection("ENV"));
-Bifeldy.InitSvc(builder.Services, builder.Configuration);
+
+Bifeldy.InitBuilder(builder);
 Bifeldy.LoadConfig();
 Bifeldy.AddSwagger(
     apiUrlPrefix,
