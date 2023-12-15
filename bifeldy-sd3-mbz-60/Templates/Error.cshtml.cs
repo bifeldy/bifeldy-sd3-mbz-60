@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
-namespace bifeldy_sd3_mbz_60.Pages {
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace bifeldy_sd3_mbz_60.Templates {
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel {
-        public string? RequestId { get; set; }
+
+        public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
@@ -19,5 +22,7 @@ namespace bifeldy_sd3_mbz_60.Pages {
         public void OnGet() {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
+
     }
+
 }

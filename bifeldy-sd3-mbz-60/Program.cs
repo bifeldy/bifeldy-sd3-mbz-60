@@ -15,17 +15,40 @@ using Microsoft.AspNetCore.HttpOverrides;
 
 using MudBlazor.Services;
 
+using bifeldy_sd3_lib_60;
+using bifeldy_sd3_lib_60.Extensions;
+
 using bifeldy_sd3_mbz_60.Services;
+using bifeldy_sd3_mbz_60.Models;
+
+string apiUrlPrefix = "api";
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
+builder.Services.Configure<ENV>(builder.Configuration.GetSection("ENV"));
+Bifeldy.InitSvc(builder.Services, builder.Configuration);
+Bifeldy.LoadConfig();
+Bifeldy.AddSwagger(
+    apiUrlPrefix,
+    "Portal Database API",
+    "Tempat Lempar Query :: Oracle / Postgre / MsSQL"
+);
+Bifeldy.SetupDI();
+
 builder.Services.AddCors();
-builder.Services.AddControllers();
-builder.Services.AddRazorPages();
+builder.Services.AddControllers(x => {
+    x.UseRoutePrefix(apiUrlPrefix);
+}).AddXmlSerializerFormatters();
+builder.Services.AddRazorPages(options => {
+    options.RootDirectory = "/Templates";
+});
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddMudServices();
+builder.Services.AddHttpContextAccessor();
+
+// Tambah Dependency Injection Di Sini --
+builder.Services.AddSingleton<WeatherForecastService>();
 
 WebApplication app = builder.Build();
 
@@ -53,9 +76,18 @@ app.UseForwardedHeaders(
         ForwardedHeaders = ForwardedHeaders.All
     }
 );
+
+Bifeldy.InitApp(app);
+Bifeldy.UseSwagger(apiUrlPrefix);
+Bifeldy.UseNginxProxyPathSegment();
+Bifeldy.UseErrorHandlerMiddleware();
+Bifeldy.UseApiKeyMiddleware();
+Bifeldy.UseJwtMiddleware();
+
 app.UseEndpoints(x => {
     x.MapControllers();
+    x.MapBlazorHub();
+    x.MapRazorPages();
+    x.MapFallbackToPage("/_Host");
 });
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
 app.Run();
