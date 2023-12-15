@@ -3,7 +3,7 @@
 @using bifeldy_sd3_mbz_60.Models
 @using bifeldy_sd3_mbz_60.Services
 
-@inject WeatherForecastService ForecastService
+@inject WeatherForecastService _wfs
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -60,7 +60,7 @@ else {
     private WeatherForecast[] forecasts;
 
     protected override async Task OnInitializedAsync() {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        forecasts = await _wfs.GetForecastAsync(DateTime.Now);
     }
 
 }
