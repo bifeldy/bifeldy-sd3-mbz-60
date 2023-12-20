@@ -38,6 +38,7 @@ Bifeldy.AddSwagger(
     false
 );
 Bifeldy.SetupDI();
+Bifeldy.AddKafkaConsumerBackground("172.31.2.122:1234", "pbro_web_test");
 
 builder.Services.AddCors();
 builder.Services.AddControllers(x => {
