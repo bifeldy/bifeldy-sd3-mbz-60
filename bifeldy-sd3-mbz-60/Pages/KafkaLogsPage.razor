@@ -31,23 +31,27 @@
 
 @code {
 
+    private IDisposable kafkaSubs = null;
+
     private List<KafkaMessage<string, dynamic>> lskf = new List<KafkaMessage<string, dynamic>> {
         new KafkaMessage<string, dynamic> { Key = "INI_KEY_DEFAULT", Value = "INI_VALUE_DEFAULT" }
     };
 
     protected override void OnInitialized() {
-        _pubSub
-            .GetGlobalAppBehaviorSubject<KafkaMessage<string, dynamic>>(
-                // Ngikut sama yang ada di Program.cs
-                // Bifeldy.AddKafkaConsumerBackground("172.31.2.122:1234", "pbro_web_test");
-                $"KAFKA_CONSUMER_{"pbro_web_test".ToUpper()}"
-            )
-            .Subscribe(data => {
-                if (data != null) {
-                    lskf.Add(data);
+        if (kafkaSubs == null) {
+            kafkaSubs = _pubSub
+                .GetGlobalAppBehaviorSubject<KafkaMessage<string, dynamic>>(
+                    // Ngikut sama yang ada di Program.cs
+                    // Bifeldy.AddKafkaConsumerBackground("172.31.2.122:1234", "pbro_web_test");
+                    $"KAFKA_CONSUMER_{"pbro_web_test".ToUpper()}"
+                )
+                .Subscribe(data => {
+                    if (data != null) {
+                        lskf.Add(data);
+                    }
                 }
-            }
-        );
+            );
+        }
         base.OnInitialized();
     }
 
