@@ -1,0 +1,50 @@
+﻿@page "/kafka-logs"
+
+@using bifeldy_sd3_lib_60.Models
+@using bifeldy_sd3_lib_60.Services
+
+@inject IPubSubService _pubSub
+
+<PageTitle>Kafka logs</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="px-0" Style="background: purple; height: 64px;">
+    asdasdasd
+</MudContainer>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="py-5 px-5">
+
+    <MudText Typo="Typo.h3" GutterBottom="true">
+        Kafka logs
+    </MudText>
+
+    <MudProgressLinear Color="Color.Secondary" Indeterminate="true" Class="my-8" />
+
+    @foreach (var km in lskf) {
+        <MudText>
+            Key => @km.Key :: Value => @km.Value.ToString()
+        </MudText>
+    }
+
+</MudContainer>
+
+
+@code {
+
+    private List<KafkaMessage<string, dynamic>> lskf = new List<KafkaMessage<string, dynamic>> {
+        new KafkaMessage<string, dynamic> { Key = "INI_KEY_DEFAULT", Value = "INI_VALUE_DEFAULT" }
+    };
+
+    protected override void OnInitialized() {
+        _pubSub
+            .GetGlobalAppBehaviorSubject<KafkaMessage<string, dynamic>>(
+                $"KAFKA_CONSUMER_{"pbro_web_test".ToUpper()}"
+            )
+            .Subscribe(data => {
+                if (data != null) {
+                    lskf.Add(data);
+                }
+            }
+        );
+    }
+
+}
