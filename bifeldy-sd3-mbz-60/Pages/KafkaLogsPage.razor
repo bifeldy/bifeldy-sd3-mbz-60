@@ -1,5 +1,7 @@
 ﻿@page "/kafka-logs"
 
+@implements IDisposable
+
 @using bifeldy_sd3_lib_60.Models
 @using bifeldy_sd3_lib_60.Services
 
@@ -7,6 +9,7 @@
 
 
 <PageTitle>Kafka logs</PageTitle>
+
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="px-0" Style="background: purple; height: 64px;">
     asdasdasd
@@ -48,10 +51,15 @@
                 .Subscribe(data => {
                     if (data != null) {
                         lskf.Add(data);
+                        base.StateHasChanged();
                     }
                 }
             );
         }
+    }
+
+    public void Dispose() {
+        kafkaSubs.Dispose();
     }
 
 }
