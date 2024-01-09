@@ -86,6 +86,7 @@ app.UseForwardedHeaders(
 Bifeldy.InitApp(app);
 Bifeldy.UseSwagger(apiUrlPrefix);
 Bifeldy.UseNginxProxyPathSegment();
+Bifeldy.UseHelmet();
 Bifeldy.UseErrorHandlerMiddleware();
 Bifeldy.UseApiKeyMiddleware();
 Bifeldy.UseJwtMiddleware();
