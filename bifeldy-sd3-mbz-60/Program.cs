@@ -40,7 +40,7 @@ Bifeldy.AddSwagger(
 Bifeldy.SetupDI();
 
 // Background Hosted Service Long Run Task Di Sini --
-Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "web_approval_G001");
+Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "web_approval", suffixKodeDc: true);
 
 builder.Services.AddCors();
 builder.Services.AddControllers(x => {
