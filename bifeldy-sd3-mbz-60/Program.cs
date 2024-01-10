@@ -85,16 +85,17 @@ app.UseForwardedHeaders(
 
 Bifeldy.InitApp(app);
 Bifeldy.UseSwagger(apiUrlPrefix);
-Bifeldy.UseNginxProxyPathSegment();
 Bifeldy.UseHelmet();
+Bifeldy.UseNginxProxyPathSegment();
 Bifeldy.UseErrorHandlerMiddleware();
 Bifeldy.UseApiKeyMiddleware();
 Bifeldy.UseJwtMiddleware();
 
 app.UseEndpoints(x => {
     x.MapControllers();
+    x.Map("/api/{**slug}", Bifeldy.Handle404ApiNotFound);
     x.MapBlazorHub();
     x.MapRazorPages();
-    x.MapFallbackToPage("/_Host");
+    x.MapFallbackToPage("/{**slug}", "/_Host");
 });
 app.Run();
