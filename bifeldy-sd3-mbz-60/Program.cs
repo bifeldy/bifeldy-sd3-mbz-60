@@ -42,10 +42,10 @@ Bifeldy.AddJobScheduler();
 Bifeldy.SetupDI();
 
 // Background Hosted Service Long Run Task Di Sini --
-Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "web_approval", _suffixKodeDc: true);
+// Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "web_approval", _suffixKodeDc: true);
 
 // Job Scheduler Di Sini -- https://www.freeformatter.com/cron-expression-generator-quartz.html
-Bifeldy.CreateJobSchedule<JobExample>("0 * * ? * *");
+// Bifeldy.CreateJobSchedule<JobExample>("0 * * ? * *");
 
 builder.Services.AddCors();
 builder.Services.AddControllers(x => {
