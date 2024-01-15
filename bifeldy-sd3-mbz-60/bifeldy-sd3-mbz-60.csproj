@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <Folder Include="Middlewares\" />
+      <Folder Include="Tables\" />
       <Folder Include="Repositories\" />
     </ItemGroup>
 
