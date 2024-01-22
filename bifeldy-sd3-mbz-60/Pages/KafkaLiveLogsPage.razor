@@ -2,11 +2,16 @@
 
 @implements IDisposable
 
+@using System.Reactive
+@using System.Reactive.Linq
+@using System.Reactive.Subjects
+
 @using Confluent.Kafka
 
 @using bifeldy_sd3_lib_60.Models
 @using bifeldy_sd3_lib_60.Services
 
+@inject IApplicationService _app
 @inject IPubSubService _pubSub
 
 
@@ -19,7 +24,7 @@
     <MudText Typo="Typo.h3" GutterBottom="true">
         Kafka live logs
         <MudText Typo="Typo.h5" GutterBottom="true">
-            @KAFKA_TOPIC
+            @KAFKA_CONSUMER_NAME
         </MudText>
     </MudText>
 
@@ -42,27 +47,41 @@
 
 @code {
 
-    private IDisposable kafkaSubs = null;
+    private IDisposable kafkaProducerSubs = null;
+    private IDisposable kafkaConsumerSubs = null;
 
     private List<Message<string, dynamic>> lskf = null;
 
+    //
     // Ngikut sama yang ada di Program.cs
-    // Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "web_approval_G001");
-    // KAFKA_CONSUMER_172.31.2.122:9092#WEB_APPROVAL_G001
-
-    private static string KAFKA_TYPE = "KAFKA_CONSUMER";
-    private static string KAFKA_HOSTPORT = "172.31.2.122:9092";
-    private static string KAFKA_TOPIC = "web_approval_G001";
-
-    private static string KAFKA_NAME = $"KAFKA_CONSUMER_{KAFKA_HOSTPORT.ToUpper()}#{KAFKA_TOPIC.ToUpper()}";
+    //
+    // Bifeldy.AddKafkaProducerBackground("172.31.2.122:9092", "bias_uji_coba");
+    // private static string KAFKA_PRODUCER_NAME = $"KAFKA_PRODUCER_172.31.2.122:9092#{"bias_uji_coba".ToUpper()}";
+    //
+    // Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "bias_uji_coba");
+    // private static string KAFKA_CONSUMER_NAME = $"KAFKA_CONSUMER_172.31.2.122:9092#{"bias_uji_coba".ToUpper()}";
+    //
+    // Atau ambil yang di appsettings.json
+    //
+    private static string KAFKA_PRODUCER_NAME = $"KAFKA_PRODUCER_0";
+    private static string KAFKA_CONSUMER_NAME = $"KAFKA_CONSUMER_0";
 
     protected override void OnInitialized() {
-        if (kafkaSubs == null && _pubSub.IsExist(KAFKA_NAME)) {
+        if (kafkaProducerSubs == null && _pubSub.IsExist(KAFKA_PRODUCER_NAME)) {
+            kafkaProducerSubs = Observable.Interval(TimeSpan.FromSeconds(3)).Timestamp().Subscribe(data => {
+                var msg = new Message<string, dynamic> {
+                    Key = _app.AppName,
+                    Value = $"{data.Value} :: {data.Timestamp.ToUniversalTime().ToString("O")}"
+                };
+                _pubSub.GetGlobalAppBehaviorSubject<Message<string, dynamic>>(KAFKA_PRODUCER_NAME).OnNext(msg);
+            });
+        }
+        if (kafkaConsumerSubs == null && _pubSub.IsExist(KAFKA_CONSUMER_NAME)) {
             if (lskf == null) {
                 lskf = new List<Message<string, dynamic>>();
             }
-            kafkaSubs = _pubSub
-                .GetGlobalAppBehaviorSubject<Message<string, dynamic>>(KAFKA_NAME)
+            kafkaConsumerSubs = _pubSub
+                .GetGlobalAppBehaviorSubject<Message<string, dynamic>>(KAFKA_CONSUMER_NAME)
                 .Subscribe(async data => {
                     if (data != null) {
                         lskf.Add(data);
@@ -73,7 +92,8 @@
     }
 
     public void Dispose() {
-        kafkaSubs?.Dispose();
+        kafkaProducerSubs?.Dispose();
+        kafkaConsumerSubs?.Dispose();
     }
 
 }
