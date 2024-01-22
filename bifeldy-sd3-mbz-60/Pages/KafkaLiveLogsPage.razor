@@ -2,6 +2,8 @@
 
 @implements IDisposable
 
+@using Confluent.Kafka
+
 @using bifeldy_sd3_lib_60.Models
 @using bifeldy_sd3_lib_60.Services
 
@@ -42,7 +44,7 @@
 
     private IDisposable kafkaSubs = null;
 
-    private List<KafkaMessage<string, dynamic>> lskf = null;
+    private List<Message<string, dynamic>> lskf = null;
 
     // Ngikut sama yang ada di Program.cs
     // Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "web_approval_G001");
@@ -57,10 +59,10 @@
     protected override void OnInitialized() {
         if (kafkaSubs == null && _pubSub.IsExist(KAFKA_NAME)) {
             if (lskf == null) {
-                lskf = new List<KafkaMessage<string, dynamic>>();
+                lskf = new List<Message<string, dynamic>>();
             }
             kafkaSubs = _pubSub
-                .GetGlobalAppBehaviorSubject<KafkaMessage<string, dynamic>>(KAFKA_NAME)
+                .GetGlobalAppBehaviorSubject<Message<string, dynamic>>(KAFKA_NAME)
                 .Subscribe(async data => {
                     if (data != null) {
                         lskf.Add(data);
