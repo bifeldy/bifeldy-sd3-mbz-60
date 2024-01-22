@@ -46,9 +46,13 @@
 
     // Ngikut sama yang ada di Program.cs
     // Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "web_approval_G001");
+    // KAFKA_CONSUMER_172.31.2.122:9092#WEB_APPROVAL_G001
+
     private static string KAFKA_TYPE = "KAFKA_CONSUMER";
+    private static string KAFKA_HOSTPORT = "172.31.2.122:9092";
     private static string KAFKA_TOPIC = "web_approval_G001";
-    private static string KAFKA_NAME = $"{KAFKA_TYPE}_{KAFKA_TOPIC.ToUpper()}";
+
+    private static string KAFKA_NAME = $"KAFKA_CONSUMER_{KAFKA_HOSTPORT.ToUpper()}#{KAFKA_TOPIC.ToUpper()}";
 
     protected override void OnInitialized() {
         if (kafkaSubs == null && _pubSub.IsExist(KAFKA_NAME)) {

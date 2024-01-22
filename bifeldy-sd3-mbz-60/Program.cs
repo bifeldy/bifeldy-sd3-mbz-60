@@ -46,6 +46,7 @@ Bifeldy.SetupDI();
 
 // Job Scheduler Di Sini -- https://www.freeformatter.com/cron-expression-generator-quartz.html
 // Bifeldy.CreateJobSchedule<JobExample>("0 * * ? * *");
+// Bifeldy.CreateJobSchedules("0 * * ? * *", typeof(JobExample), typeof(JobExample), typeof(JobExample));
 
 builder.Services.AddCors();
 builder.Services.AddControllers(x => {

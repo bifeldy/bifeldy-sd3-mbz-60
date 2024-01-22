@@ -22,8 +22,14 @@ namespace bifeldy_sd3_mbz_60.JobSchedulers {
         }
 
         public override async Task DoWork() {
-            DateTime dt = await _orapg.ExecScalarAsync<DateTime>($@"SELECT {(_envVar.IS_USING_POSTGRES ? "NOW()" : "SYSDATE FROM DUAL")}");
-            _logger.LogInformation($"Tanggal & Waktu Database => {dt}");
+            try {
+                DateTime dt = await _orapg.ExecScalarAsync<DateTime>($@"SELECT {(_envVar.IS_USING_POSTGRES ? "NOW()" : "SYSDATE FROM DUAL")}");
+                _logger.LogInformation($"Tanggal & Waktu Database => {dt}");
+                Console.WriteLine(dt.ToString());
+            }
+            catch (Exception ex) {
+                _logger.LogError($"{_context.Scheduler.SchedulerName} {ex.Message}");
+            }
         }
 
     }
