@@ -52,9 +52,11 @@ Bifeldy.AddKafkaAutoProducerConsumerBackground();
 builder.Services.AddCors();
 builder.Services.AddControllers(x => {
     x.UseRoutePrefix(apiUrlPrefix);
+}).AddJsonOptions(x => {
+    x.JsonSerializerOptions.PropertyNamingPolicy = null;
 }).AddXmlSerializerFormatters();
-builder.Services.AddRazorPages(options => {
-    options.RootDirectory = "/Templates";
+builder.Services.AddRazorPages(x => {
+    x.RootDirectory = "/Templates";
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
