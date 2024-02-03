@@ -103,9 +103,9 @@ Bifeldy.UseJwtMiddleware();
 
 app.UseEndpoints(x => {
     x.MapControllers();
-    x.Map("/api/{**slug}", Bifeldy.Handle404ApiNotFound);
+    x.Map("/" + apiUrlPrefix + "/{*url:regex(^(?!swagger).*$)}", Bifeldy.Handle404ApiNotFound);
     x.MapBlazorHub();
     x.MapRazorPages();
-    x.MapFallbackToPage("/{**slug}", "/_Host");
+    x.MapFallbackToPage("/{*url:regex(^(?!" + apiUrlPrefix + "/swagger).*$)}", "/_Host");
 });
 await app.RunAsync();
