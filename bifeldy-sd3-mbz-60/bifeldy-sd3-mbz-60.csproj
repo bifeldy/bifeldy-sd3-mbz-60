@@ -7,25 +7,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="5.7.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Fody" Version="6.8.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="MudBlazor" Version="6.0.13" />
+        <PackageReference Include="Costura.Fody" Version="5.7.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Fody" Version="6.8.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="MudBlazor" Version="6.0.13" />
     </ItemGroup>
 
     <ItemGroup>
-    <ProjectReference Include="..\..\bifeldy-sd3-lib-60\bifeldy-sd3-lib-60\bifeldy-sd3-lib-60.csproj" />
+        <ProjectReference Include="..\..\bifeldy-sd3-lib-60\bifeldy-sd3-lib-60\bifeldy-sd3-lib-60.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Middlewares\" />
-      <Folder Include="Tables\" />
-      <Folder Include="Repositories\" />
+        <Folder Include="Middlewares\" />
+        <Folder Include="Tables\" />
+        <Folder Include="Repositories\" />
     </ItemGroup>
 
 </Project>
