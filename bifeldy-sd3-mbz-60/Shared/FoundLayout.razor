@@ -2,6 +2,7 @@
 
 @implements IDisposable
 
+@using bifeldy_sd3_lib_60.Repositories
 @using bifeldy_sd3_lib_60.Services
 
 @inject IJSRuntime _js
@@ -9,6 +10,7 @@
 
 @inject ILogger<FoundLayout> _logger
 @inject IApplicationService _app
+@inject IGeneralRepository _generalRepo
 
 
 <MudThemeProvider />
@@ -19,21 +21,28 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText>@_pageTitle</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Href="https://mudblazor.com/" Target="_blank" />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
-        <MudDrawerHeader Class="mud-theme-primary" Style="align-items: center;">
-            <MudText Typo="Typo.h6">bifeldy_sd3_mbz_60</MudText>
-        </MudDrawerHeader>
-        <NavMenu />
-    </MudDrawer>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="px-0">
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Href="https://mudblazor.com/" Target="_blank" />
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
+        </MudAppBar>
+        <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+            <MudDrawerHeader Class="mud-theme-primary" Style="align-items: center;">
+                <MudText Typo="Typo.h6">@_appName</MudText>
+            </MudDrawerHeader>
+            <NavMenu />
+        </MudDrawer>
+        <MudMainContent Class="mb-8">
             @Body
-        </MudContainer>
     </MudMainContent>
+    <MudAppBar Bottom="true" Elevation="0" Dense="true" Style="max-height: 32px;">
+        <MudText>
+            <small>@_app.AppName - v@_app.AppVersion</small>
+        </MudText>
+        <MudSpacer />
+        <MudText>
+            <small>@_kodeDc</small>
+        </MudText>
+    </MudAppBar>
 </MudLayout>
 
 
@@ -49,12 +58,16 @@
 
 @code {
 
-    string _pageTitle = string.Empty;
+    string _appName = string.Empty;
+    string _kodeDc = string.Empty;
+    string _pageTitle = "Index";
 
     bool _drawerOpen = true;
 
-    protected override void OnInitialized() {
+    protected override async void OnInitialized() {
         _nm.LocationChanged += OnLocationChanged;
+        _kodeDc = await _generalRepo.GetKodeDc(); ;
+        _appName = _app.AppName.Substring(0, 10) + "... - " + _kodeDc;
     }
 
     public void Dispose() {
