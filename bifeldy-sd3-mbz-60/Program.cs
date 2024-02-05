@@ -39,15 +39,6 @@ Bifeldy.AddSwagger(
     false
 );
 Bifeldy.AddJobScheduler();
-Bifeldy.SetupDI();
-
-// Background Hosted Service Long Run Task Di Sini --
-// Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "bias_uji_coba", _suffixKodeDc: true);
-Bifeldy.AddKafkaAutoProducerConsumerBackground();
-
-// Job Scheduler Di Sini -- https://www.freeformatter.com/cron-expression-generator-quartz.html
-// Bifeldy.CreateJobSchedule<JobExample>("0 * * ? * *");
-// Bifeldy.CreateJobSchedules("0 * * ? * *", typeof(JobExample), typeof(JobExample), typeof(JobExample));
 
 builder.Services.AddCors();
 builder.Services.AddControllers(x => {
@@ -55,6 +46,7 @@ builder.Services.AddControllers(x => {
 }).AddJsonOptions(x => {
     x.JsonSerializerOptions.PropertyNamingPolicy = null;
 }).AddXmlSerializerFormatters();
+builder.Services.AddAuthenticationCore();
 builder.Services.AddRazorPages(x => {
     x.RootDirectory = "/Templates";
 });
@@ -63,7 +55,17 @@ builder.Services.AddMudServices();
 builder.Services.AddHttpContextAccessor();
 
 // Tambah Dependency Injection Di Sini --
+Bifeldy.SetupDI();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+
+// Background Hosted Service Long Run Task Di Sini --
+// Bifeldy.AddKafkaConsumerBackground("172.31.2.122:9092", "bias_uji_coba", _suffixKodeDc: true);
+Bifeldy.AddKafkaAutoProducerConsumerBackground();
+
+// Job Scheduler Di Sini -- https://www.freeformatter.com/cron-expression-generator-quartz.html
+// Bifeldy.CreateJobSchedule<JobExample>("0 * * ? * *");
+// Bifeldy.CreateJobSchedules("0 * * ? * *", typeof(JobExample), typeof(JobExample), typeof(JobExample));
 
 WebApplication app = builder.Build();
 
@@ -99,7 +101,6 @@ Bifeldy.UseHelmet();
 Bifeldy.UseNginxProxyPathSegment();
 Bifeldy.UseErrorHandlerMiddleware();
 Bifeldy.UseApiKeyMiddleware();
-Bifeldy.UseJwtMiddleware();
 
 app.UseEndpoints(x => {
     x.MapControllers();
