@@ -10,8 +10,6 @@
  * 
  */
 
-using System.Reflection;
-
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.HttpOverrides;
 
