@@ -20,6 +20,7 @@ using bifeldy_sd3_lib_60.Extensions;
 
 using bifeldy_sd3_mbz_60.Services;
 using bifeldy_sd3_mbz_60.Models;
+using bifeldy_sd3_mbz_60.Repositories;
 // using bifeldy_sd3_mbz_60.JobSchedulers;
 
 string apiUrlPrefix = "api";
@@ -56,7 +57,10 @@ builder.Services.AddHttpContextAccessor();
 
 // Tambah Dependency Injection Di Sini --
 Bifeldy.AddDependencyInjection();
-builder.Services.AddSingleton<WeatherForecastService>();
+// --
+builder.Services.AddScoped<IWeatherForecastRepository, CWeatherForecastRepository>();
+// --
+builder.Services.AddSingleton<IWeatherForecastService, CWeatherForecastService>();
 
 // Background Hosted Service Long Run Task Di Sini --
 // Bifeldy.AddKafkaConsumerBackground("127.0.0.1:9092", "bias_uji_coba", _suffixKodeDc: true);
