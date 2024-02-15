@@ -10,6 +10,8 @@
  * 
  */
 
+using System.Reflection;
+
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.HttpOverrides;
 
@@ -32,13 +34,7 @@ builder.Services.Configure<ENV>(builder.Configuration.GetSection("ENV"));
 Bifeldy.InitBuilder(builder);
 Bifeldy.SetupSerilog();
 Bifeldy.LoadConfig();
-Bifeldy.AddSwagger(
-    apiUrlPrefix,
-    "Portal Database API",
-    "Tempat Lempar Query :: Oracle / Postgre / MsSQL",
-    true,
-    false
-);
+Bifeldy.AddSwagger(apiUrlPrefix);
 Bifeldy.AddJobScheduler();
 
 builder.Services.AddCors();
