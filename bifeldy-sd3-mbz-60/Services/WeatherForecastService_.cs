@@ -1,5 +1,3 @@
-using bifeldy_sd3_mbz_60.Models;
-
 namespace bifeldy_sd3_mbz_60.Services {
 
     public interface IWeatherForecastService {
