@@ -29,16 +29,22 @@
             Weather Forecast
         </MudNavLink>
     </MudNavGroup>
-    <AuthorizeView Roles="USER">
+    <AuthorizeView Roles="USER_SD_SSD_3">
         <Authorized>
+            <MudNavLink Href="/api-key-ip-origin" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Key">
+                API Key & IP Origin
+            </MudNavLink>
+            <MudNavLink Href="/api-token-login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Token">
+                API Token & Login External
+            </MudNavLink>
+            <MudNavLink Href="/attachment" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.FileUpload">
+                File Attachment
+            </MudNavLink>
             <MudNavLink Href="/kafka-live-logs" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.ElectricalServices">
                 Kafka Live Logs
             </MudNavLink>
         </Authorized>
     </AuthorizeView>
-    <MudNavLink Href="/attachment" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.FileUpload">
-        File Attachment
-    </MudNavLink>
     <MudNavLink Href="/api" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Api">
         Swagger Api Docs
     </MudNavLink>

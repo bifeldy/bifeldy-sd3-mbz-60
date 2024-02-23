@@ -12,16 +12,17 @@
 
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.HttpOverrides;
+// using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 using MudBlazor.Services;
 
 using bifeldy_sd3_lib_60;
 using bifeldy_sd3_lib_60.Extensions;
 
-using bifeldy_sd3_mbz_60.Services;
+using bifeldy_sd3_mbz_60.JobSchedulers;
 using bifeldy_sd3_mbz_60.Models;
 using bifeldy_sd3_mbz_60.Repositories;
-// using bifeldy_sd3_mbz_60.JobSchedulers;
+using bifeldy_sd3_mbz_60.Services;
 
 string apiUrlPrefix = "api";
 
@@ -32,7 +33,7 @@ builder.Services.Configure<ENV>(builder.Configuration.GetSection("ENV"));
 Bifeldy.InitBuilder(builder);
 Bifeldy.SetupSerilog();
 Bifeldy.LoadConfig();
-Bifeldy.AddSwagger(apiUrlPrefix);
+Bifeldy.AddSwagger(apiUrlPrefix, enableJwt: true);
 Bifeldy.AddJobScheduler();
 
 builder.Services.AddCors();
@@ -40,7 +41,7 @@ builder.Services.AddControllers(x => {
     x.UseRoutePrefix(apiUrlPrefix);
 }).AddJsonOptions(x => {
     x.JsonSerializerOptions.PropertyNamingPolicy = null;
-}).AddXmlSerializerFormatters();
+}).AddXmlSerializerFormatters(); // .PartManager.ApplicationParts.Add(new AssemblyPart(typeof(Bifeldy).Assembly));
 builder.Services.AddAuthenticationCore();
 builder.Services.AddRazorPages(x => {
     x.RootDirectory = "/Templates";
@@ -57,14 +58,24 @@ builder.Services.AddScoped<IWeatherForecastRepository, CWeatherForecastRepositor
 builder.Services.AddSingleton<IWeatherForecastService, CWeatherForecastService>();
 
 // Background Hosted Service Long Run Task Di Sini --
-// Bifeldy.AddKafkaConsumerBackground("127.0.0.1:9092", "bias_uji_coba", _suffixKodeDc: true);
+// Bifeldy.AddKafkaProducerBackground("127.0.0.1:9092", "bias_uji_coba", suffixKodeDc: true);
+// Bifeldy.AddKafkaConsumerBackground("127.0.0.1:9092", "bias_uji_coba", suffixKodeDc: true);
 Bifeldy.AddKafkaAutoProducerConsumerBackground();
 
 // Job Scheduler Di Sini -- https://www.freeformatter.com/cron-expression-generator-quartz.html
-// Bifeldy.CreateJobSchedule<JobExample>("0 * * ? * *");
-// Bifeldy.CreateJobSchedules("0 * * ? * *", typeof(JobExample), typeof(JobExample), typeof(JobExample));
+Bifeldy.CreateJobSchedule<JobFolderCleaner>("0 * * ? * *");
+// Bifeldy.CreateJobSchedules("0 * * ? * *", typeof(JobFolderCleaner), typeof(JobFolderCleaner), typeof(JobFolderCleaner));
 
 WebApplication app = builder.Build();
+
+Bifeldy.InitApp(app);
+Bifeldy.UseSwagger(apiUrlPrefix);
+await Bifeldy.StartJobScheduler();
+Bifeldy.UseHelmet();
+Bifeldy.UseNginxProxyPathSegment();
+Bifeldy.UseErrorHandlerMiddleware();
+Bifeldy.UseApiKeyMiddleware();
+Bifeldy.UseJwtMiddleware();
 
 if (app.Environment.IsDevelopment()) {
     app.UseDeveloperExceptionPage();
@@ -84,20 +95,13 @@ app.UseCors(x =>
         .AllowCredentials()
 );
 // app.UseAuthentication();
-// app.UseAuthorization();
+app.UseAuthorization();
+
 app.UseForwardedHeaders(
     new ForwardedHeadersOptions {
         ForwardedHeaders = ForwardedHeaders.All
     }
 );
-
-Bifeldy.InitApp(app);
-Bifeldy.UseSwagger(apiUrlPrefix);
-await Bifeldy.StartJobScheduler();
-Bifeldy.UseHelmet();
-Bifeldy.UseNginxProxyPathSegment();
-Bifeldy.UseErrorHandlerMiddleware();
-Bifeldy.UseApiKeyMiddleware();
 
 app.UseEndpoints(x => {
     x.MapControllers();
@@ -106,4 +110,5 @@ app.UseEndpoints(x => {
     x.MapRazorPages();
     x.MapFallbackToPage("/{*url:regex(^(?!" + apiUrlPrefix + "/swagger).*$)}", "/_Host");
 });
+
 await app.RunAsync();

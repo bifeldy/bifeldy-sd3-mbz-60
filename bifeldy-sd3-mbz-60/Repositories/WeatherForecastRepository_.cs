@@ -1,17 +1,4 @@
-﻿/**
- * 
- * Author       :: Basilius Bias Astho Christyono
- * Phone        :: (+62) 889 236 6466
- * 
- * Department   :: IT SD 03
- * Mail         :: bias@indomaret.co.id
- * 
- * Catatan      :: Contoh Weather Dengan Database
- *              :: Harap Didaftarkan Ke DI Container
- * 
- */
-
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
 using bifeldy_sd3_lib_60.Abstractions;
 using bifeldy_sd3_lib_60.Databases;
