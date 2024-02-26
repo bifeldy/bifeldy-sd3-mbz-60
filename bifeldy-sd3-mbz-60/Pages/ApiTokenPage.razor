@@ -145,7 +145,7 @@
                 }
             }
             else {
-                apiToken = (API_TOKEN_T)result.Data;
+                apiToken = (API_TOKEN_T) result.Data;
                 bool success = false;
                 await Task.Run(async () => {
                     _orapg.Set<API_TOKEN_T>().Update(apiToken);
