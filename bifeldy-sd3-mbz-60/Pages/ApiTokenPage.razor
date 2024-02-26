@@ -99,11 +99,15 @@
         if (string.IsNullOrWhiteSpace(searchString)) {
             return true;
         }
-        if (element.USER_NAME.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
-            return true;
+        if (!string.IsNullOrEmpty(element.USER_NAME)) {
+            if (element.USER_NAME.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
         }
-        if (element.PASSWORD.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
-            return true;
+        if (!string.IsNullOrEmpty(element.PASSWORD)) {
+            if (element.PASSWORD.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
         }
         return false;
     }

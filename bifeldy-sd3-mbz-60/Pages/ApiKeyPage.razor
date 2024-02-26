@@ -95,11 +95,15 @@
         if (string.IsNullOrWhiteSpace(searchString)) {
             return true;
         }
-        if (element.KEY.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
-            return true;
+        if (!string.IsNullOrEmpty(element.KEY)) {
+            if (element.KEY.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
         }
-        if (element.IP_ORIGIN.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
-            return true;
+        if (!string.IsNullOrEmpty(element.IP_ORIGIN)) {
+            if (element.IP_ORIGIN.Contains(searchString, StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
         }
         return false;
     }
