@@ -132,8 +132,12 @@
         DialogResult result = await dialog.Result;
         if (!result.Cancelled) {
             if (apiToken == null) {
-                apiToken = (API_TOKEN_T) result.Data;
-                if (await _apiTokenRepo.Create(apiToken)) {
+                apiToken = (API_TOKEN_T)result.Data;
+                bool success = false;
+                await Task.Run(async () => {
+                    success = await _apiTokenRepo.Create(apiToken);
+                });
+                if (success) {
                     Snackbar.Add("Berhasil Menambah API Token Login", Severity.Success);
                 }
                 else {
@@ -141,9 +145,13 @@
                 }
             }
             else {
-                apiToken = (API_TOKEN_T) result.Data;
-                _orapg.Set<API_TOKEN_T>().Update(apiToken);
-                if (await _orapg.SaveChangesAsync() > 0) {
+                apiToken = (API_TOKEN_T)result.Data;
+                bool success = false;
+                await Task.Run(async () => {
+                    _orapg.Set<API_TOKEN_T>().Update(apiToken);
+                    success = await _orapg.SaveChangesAsync() > 0;
+                });
+                if (success) {
                     Snackbar.Add("Berhasil Memperbarui API Token Login", Severity.Success);
                 }
                 else {

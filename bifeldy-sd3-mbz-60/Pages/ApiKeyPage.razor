@@ -129,7 +129,11 @@
         if (!result.Cancelled) {
             if (apiKey == null) {
                 apiKey = (API_KEY_T) result.Data;
-                if (await _apiKeyRepo.Create(apiKey)) {
+                bool success = false;
+                await Task.Run(async () => {
+                    success = await _apiKeyRepo.Create(apiKey);
+                });
+                if (success) {
                     Snackbar.Add("Berhasil Menambah API Key IP Origin", Severity.Success);
                 }
                 else {
@@ -137,9 +141,13 @@
                 }
             }
             else {
-                apiKey = (API_KEY_T) result.Data;
-                _orapg.Set<API_KEY_T>().Update(apiKey);
-                if (await _orapg.SaveChangesAsync() > 0) {
+                apiKey = (API_KEY_T)result.Data;
+                bool success = false;
+                await Task.Run(async () => {
+                    _orapg.Set<API_KEY_T>().Update(apiKey);
+                    success = await _orapg.SaveChangesAsync() > 0;
+                });
+                if (success) {
                     Snackbar.Add("Berhasil Memperbarui API Key IP Origin", Severity.Success);
                 }
                 else {
