@@ -37,8 +37,8 @@
     </MudText>
 
     <MudDivider Class="my-3" />
-
-    @if (apiKeys == null) {
+    
+    @if (apiKeys.Count <= 0) {
         <MudProgressCircular Color="Color.Default" Indeterminate="true" />
     }
     else {
@@ -77,15 +77,18 @@
     private string searchQuery = string.Empty;
     private bool SearchFilter(API_KEY_T element) => Search(element, searchQuery);
 
-    protected override async void OnInitialized() {
-        await RefreshData();
+    protected override void OnInitialized() {
+        RefreshData();
     }
 
-    private async Task RefreshData() {
-        apiKeys.Clear();
-        List<API_KEY_T> newApiKeys = await _apiKeyRepo.GetAll();
-        apiKeys.AddRange(newApiKeys);
-        await base.InvokeAsync(base.StateHasChanged);
+    private void RefreshData() {
+        Task.Run(async () => {
+            apiKeys.Clear();
+            await base.InvokeAsync(base.StateHasChanged);
+            List<API_KEY_T> newApiKeys = await _apiKeyRepo.GetAll();
+            apiKeys.AddRange(newApiKeys);
+            await base.InvokeAsync(base.StateHasChanged);
+        });
     }
 
     private bool Search(API_KEY_T element, string searchString) {
@@ -140,7 +143,7 @@
                 }
             }
         }
-        await RefreshData();
+        RefreshData();
     }
 
 }
