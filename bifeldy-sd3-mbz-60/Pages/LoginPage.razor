@@ -33,7 +33,7 @@
             <MudText Align="Align.Center" Class="red-text">
                 <small>@errorMessage</small>
             </MudText>
-            <MudButton OnClick="Login" Variant="Variant.Filled" Class="ml-auto" Color="Color.Secondary">
+            <MudButton OnClick="Login" Variant="Variant.Filled" Class="ml-auto" Color="Color.Secondary" Disabled="isSubmitted">
                 @(isSubmitted ? "Mohon Menunggu .." : "Masuk")
             </MudButton>
         </MudCardActions>
@@ -61,7 +61,7 @@
     protected override async Task OnInitializedAsync() {
         var user = (await authStateTask).User;
         if (user.Identity.IsAuthenticated) {
-            _nm.NavigateTo("/");
+            _nm.NavigateTo(_nm.BaseUri);
         }
     }
 
@@ -76,7 +76,7 @@
             isSubmitted = false;
             base.StateHasChanged();
             if (string.IsNullOrEmpty(errorMessage)) {
-                _nm.NavigateTo("/");
+                _nm.NavigateTo(_nm.BaseUri);
             }
             else {
                 _snackbar.Add($@"
