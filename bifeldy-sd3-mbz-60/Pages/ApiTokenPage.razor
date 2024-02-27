@@ -38,7 +38,7 @@
 
     <MudDivider Class="my-3" />
 
-    @if (apiTokens.Count <= 0) {
+    @if (isBusy) {
         <MudProgressCircular Color="Color.Default" Indeterminate="true" />
     }
     else {
@@ -75,6 +75,7 @@
 
 
 @code {
+    private bool isBusy = false;
 
     private List<API_TOKEN_T> apiTokens = new List<API_TOKEN_T>();
 
@@ -87,10 +88,12 @@
 
     private void RefreshData() {
         Task.Run(async () => {
-            apiTokens.Clear();
+            isBusy = true;
             await base.InvokeAsync(base.StateHasChanged);
+            apiTokens.Clear();
             List<API_TOKEN_T> newApiTokens = await _apiTokenRepo.GetAll();
             apiTokens.AddRange(newApiTokens);
+            isBusy = false;
             await base.InvokeAsync(base.StateHasChanged);
         });
     }
