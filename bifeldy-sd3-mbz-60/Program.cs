@@ -23,6 +23,7 @@ using bifeldy_sd3_mbz_60.JobSchedulers;
 using bifeldy_sd3_mbz_60.Models;
 using bifeldy_sd3_mbz_60.Repositories;
 using bifeldy_sd3_mbz_60.Services;
+using bifeldy_sd3_mbz_60.Components.Spinner;
 
 string apiUrlPrefix = "api";
 
@@ -53,6 +54,7 @@ builder.Services.AddHttpContextAccessor();
 // Tambah Dependency Injection Di Sini --
 Bifeldy.AddDependencyInjection();
 // --
+builder.Services.AddScoped<ISpinnerService, CSpinnerService>();
 builder.Services.AddScoped<IWeatherForecastRepository, CWeatherForecastRepository>();
 // --
 builder.Services.AddSingleton<IWeatherForecastService, CWeatherForecastService>();

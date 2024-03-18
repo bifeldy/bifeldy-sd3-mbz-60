@@ -5,10 +5,13 @@
 @using bifeldy_sd3_lib_60.Repositories
 @using bifeldy_sd3_lib_60.Services
 
+@using bifeldy_sd3_mbz_60.Components.Spinner;
+
 @inject IJSRuntime _js
 @inject NavigationManager _nm
 @inject IHttpContextAccessor _hca
 
+@inject ISpinnerService _spinnerService
 @inject ILogger<FoundLayout> _logger
 @inject IGlobalService _gs
 @inject IApplicationService _app
@@ -21,19 +24,19 @@
 
 <MudLayout>
     <MudAppBar Elevation="1" Dense="true" DisableGutters="true">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" Class="ml-1"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" Class="ml-1" />
         <MudText>@_app.AppName ~ @_kodeDc</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Href="https://mudblazor.com/" Target="_blank" />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true" ClipMode="@DrawerClipMode.Always">
-        <MudDrawerHeader Class="mud-theme-dark pa-4" Style="align-items: center;">
-            <MudIcon Icon="@Icons.Material.Filled.PersonPin" Title="User" />
-            <!--
-                <MudImage Src="https://mudblazor.com/images/mony.jpg" Class="rounded-lg" Width="24" />
-            -->
-            @if (_drawerOpen) {
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Href="https://mudblazor.com/" Target="_blank" />
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
+        </MudAppBar>
+        <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true" ClipMode="@DrawerClipMode.Always">
+            <MudDrawerHeader Class="mud-theme-dark pa-4" Style="align-items: center;">
+                <MudIcon Icon="@Icons.Material.Filled.PersonPin" Title="User" />
+                <!--
+                    <MudImage Src="https://mudblazor.com/images/mony.jpg" Class="rounded-lg" Width="24" />
+                -->
+                @if (_drawerOpen) {
                 <MudText Typo="Typo.h6" Class="ml-3 overflow-hidden" Style="white-space: nowrap; text-overflow: ellipsis;">
                     <AuthorizeView>
                         <Authorized>
@@ -49,9 +52,9 @@
         <NavMenu />
     </MudDrawer>
     <MudMainContent Class="mb-8">@Body</MudMainContent>
-    <MudAppBar Bottom="true" Elevation="1" Dense="true" Style="max-height: 32px;" DisableGutters="true" Class="px-2">
-        <MudText>
-            <small>v@_app.AppVersion</small>
+        <MudAppBar Bottom="true" Elevation="1" Dense="true" Style="max-height: 32px;" DisableGutters="true" Class="px-2">
+            <MudText>
+                <small>v@_app.AppVersion</small>
         </MudText>
         <MudSpacer />
         <MudText>
@@ -80,6 +83,7 @@
     }
 
     private async void OnLocationChanged(object sender, LocationChangedEventArgs args) {
+        _spinnerService.Show();
         if (args.IsNavigationIntercepted) {
             // Navigated From HTML (eg. href="", document.window.location="")
         }
