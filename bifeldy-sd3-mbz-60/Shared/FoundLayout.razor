@@ -2,16 +2,20 @@
 
 @implements IDisposable
 
+@using Microsoft.Extensions.Options
+
+@using bifeldy_sd3_lib_60.Models
 @using bifeldy_sd3_lib_60.Repositories
 @using bifeldy_sd3_lib_60.Services
 
-@using bifeldy_sd3_mbz_60.Components.Spinner;
+@using bifeldy_sd3_mbz_60.Components.Spinner
 
 @inject IJSRuntime _js
 @inject NavigationManager _nm
 @inject IHttpContextAccessor _hca
 
 @inject ISpinnerService _spinnerService
+@inject IOptions<EnvVar> _envVar
 @inject ILogger<FoundLayout> _logger
 @inject IGlobalService _gs
 @inject IApplicationService _app
@@ -25,7 +29,7 @@
 <MudLayout>
     <MudAppBar Elevation="1" Dense="true" DisableGutters="true">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" Class="ml-1" />
-        <MudText>@_app.AppName ~ @_kodeDc</MudText>
+        <MudText>@_app.AppName ~ @_kodeDc :: @(_envVar.Value.IS_USING_POSTGRES ? "PG" : "ORA")</MudText>
             <MudSpacer />
             <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Href="https://mudblazor.com/" Target="_blank" />
             <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />

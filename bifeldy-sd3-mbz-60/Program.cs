@@ -70,6 +70,7 @@ Bifeldy.CreateJobSchedule<JobFolderCleaner>("0 * * ? * *");
 
 WebApplication app = builder.Build();
 
+Bifeldy.AppContextOverride();
 Bifeldy.InitApp(app);
 Bifeldy.UseSwagger(apiUrlPrefix);
 await Bifeldy.StartJobScheduler();
