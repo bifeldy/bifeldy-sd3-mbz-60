@@ -69,6 +69,16 @@
     private static string KAFKA_CONSUMER_NAME = $"KAFKA_CONSUMER_0";
 
     protected override void OnInitialized() {
+        StartProducer();
+        ListenConsumer();
+    }
+
+    public void Dispose() {
+        kafkaProducerSubs?.Dispose();
+        kafkaConsumerSubs?.Dispose();
+    }
+
+    private void StartProducer() {
         if (kafkaProducerSubs == null && _pubSub.IsExist(KAFKA_PRODUCER_NAME)) {
             kafkaProducerSubs = Observable.Interval(TimeSpan.FromSeconds(3)).Timestamp().Subscribe(data => {
                 var msg = new Message<string, dynamic> {
@@ -78,6 +88,9 @@
                 _pubSub.GetGlobalAppBehaviorSubject<Message<string, dynamic>>(KAFKA_PRODUCER_NAME).OnNext(msg);
             });
         }
+    }
+
+    private void ListenConsumer() {
         if (kafkaConsumerSubs == null && _pubSub.IsExist(KAFKA_CONSUMER_NAME)) {
             if (lskf == null) {
                 lskf = new List<Message<string, dynamic>>();
@@ -91,11 +104,6 @@
                     }
                 });
         }
-    }
-
-    public void Dispose() {
-        kafkaProducerSubs?.Dispose();
-        kafkaConsumerSubs?.Dispose();
     }
 
 }
