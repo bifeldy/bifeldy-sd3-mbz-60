@@ -49,7 +49,6 @@ builder.Services.AddRazorPages(x => {
 });
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
-builder.Services.AddHttpContextAccessor();
 
 // Tambah Dependency Injection Di Sini --
 Bifeldy.AddDependencyInjection();

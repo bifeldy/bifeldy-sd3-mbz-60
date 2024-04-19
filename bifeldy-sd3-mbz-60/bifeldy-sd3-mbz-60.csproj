@@ -18,6 +18,7 @@
     <ItemGroup>
         <Folder Include="Middlewares\" />
         <Folder Include="Tables\" />
+        <Folder Include="wwwroot\rdlcs\" />
     </ItemGroup>
 
 </Project>
