@@ -162,7 +162,7 @@
                 DataTable dt = await _orapg.GetDataTableAsync($@"
                     SELECT
                         a.dc_kode, a.ip_nginx, b.app_name, b.api_path,
-                        COALESCE(b.api_path, '/api/dc-prod-mast') default_api_path
+                        COALESCE(b.api_path, 'XxxG***SIM/api/') default_api_path
                     FROM
                         dc_tabel_ip_t a
                         LEFT JOIN api_dc_t b ON (
